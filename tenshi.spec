@@ -9,6 +9,8 @@ Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 Requires:	perl-base >= 1:5.6
 Requires:	perl-modules >= 1:5.8.0
 Obsoletes:	wasabi
