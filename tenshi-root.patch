@@ -1,0 +1,12 @@
+--- a/Makefile~	2004-07-16 00:15:54.000000000 +0300
++++ b/Makefile	2004-07-19 01:27:41.000000000 +0300
+@@ -35,7 +35,7 @@
+ install:
+ 	install -D tenshi ${DESTDIR}${bindir}/tenshi
+ 	[ -f ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf ] || \
+-		install -o tenshi -g root -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
++		install -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
+ 	install -d ${DESTDIR}${docdir}
+ 	install ${DOCS} ${DESTDIR}${docdir}/
+-	install -o tenshi -g root -m 750 -d ${DESTDIR}${libdir}
++	install -m 750 -d ${DESTDIR}${libdir}
