@@ -1,13 +1,15 @@
 Summary:	Log parsing and notification program
 Name:		tenshi
 Version:	0.3.2
-Release:	0.3
+Release:	0.4
 License:	GPL
 Group:		Applications/System
 Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
+Requires:	perl-base >= 1:5.6
+Requires:	perl-modules >= 1:5.8.0
 BuildArch:	noarch
 Obsoletes:	wasabi
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -17,6 +19,15 @@ Tenshi is a log monitoring program, designed to watch one or more log
 files for lines matching user defined regular expressions and report
 on the matches. The regular expressions are assigned to queues which
 have an alert interval and a list of mail recipients.
+
+Queues can be set to send a notification as soon as there is a log
+line assigned to it, or to send periodic reports.
+
+Additionally,  uninteresting  fields in the log lines (such as PID
+numbers) can be masked with the standard regular expression grouping
+operators  (  ).  This allows cleaner and more readable reports. All
+reports are separated by hostname and all messages are condensed when
+possible.
 
 %prep
 %setup -q
