@@ -1,9 +1,8 @@
-# TODO: chkconfig
 Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.3.2
-Release:	0.4
+Release:	0.5
 License:	GPL
 Group:		Applications/System
 Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
@@ -63,6 +62,22 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/chkconfig --add %{name}
+if [ -f /var/lock/subsys/%{name} ]; then
+	/etc/rc.d/init.d/%{name} restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/%{name} ]; then
+		/etc/rc.d/init.d/%{name} stop >&2
+	fi
+	/sbin/chkconfig --del %{name}
+fi
 
 %files
 %defattr(644,root,root,755)
