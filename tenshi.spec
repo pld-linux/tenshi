@@ -13,10 +13,10 @@ Obsoletes:	wasabi
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Tenshi is a log monitoring program, designed to watch one or more log files for
-lines matching user defined regular expressions and report on the matches.  The
-regular expressions are assigned to queues which have an alert interval and a
-list of mail recipients.
+Tenshi is a log monitoring program, designed to watch one or more log
+files for lines matching user defined regular expressions and report
+on the matches. The regular expressions are assigned to queues which
+have an alert interval and a list of mail recipients.
 
 %prep
 %setup -q
