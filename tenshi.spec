@@ -1,4 +1,6 @@
+# TODO: chkconfig
 Summary:	Log parsing and notification program
+Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.3.2
 Release:	0.4
@@ -10,8 +12,8 @@ Patch0:		%{name}-root.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
 Requires:	perl-base >= 1:5.6
 Requires:	perl-modules >= 1:5.8.0
-BuildArch:	noarch
 Obsoletes:	wasabi
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -23,29 +25,41 @@ have an alert interval and a list of mail recipients.
 Queues can be set to send a notification as soon as there is a log
 line assigned to it, or to send periodic reports.
 
-Additionally,  uninteresting  fields in the log lines (such as PID
+Additionally, uninteresting fields in the log lines (such as PID
 numbers) can be masked with the standard regular expression grouping
-operators  (  ).  This allows cleaner and more readable reports. All
+operators ( ). This allows cleaner and more readable reports. All
 reports are separated by hostname and all messages are condensed when
 possible.
+
+%description -l pl
+Tenshi to program do monitorowania logów zaprojektowany do ogl±dania
+jednego lub wiêkszej liczby plików logów pod k±tem linii pasuj±cych do
+zdefiniowanych przez u¿ytkownika wyra¿eñ regularnych i raportowania
+tych dopasowañ. Wyra¿enia regularne s± przypisywane do kolejek
+maj±cych czêstotliwo¶æ alarmowania i listê adresatów pocztowych.
+
+Kolejki mog± byæ konfigurowane do wysy³ania powiadomieñ zaraz po
+napotkaniu linii w logu lub wysy³ania regularnych raportów.
+
+Dodatkowo nieciekawe pola z linii logów (takie jak numery procesów)
+mog± byæ pokrywane standardowymi operatorami grupowania wyra¿eñ
+regularnych ( ). Daje to bardziej przejrzyste i bardziej czytelne
+raporty. Wszystkie raporty s± oddzielane nazw± hosta, a wszystkie
+wiadomo¶ci s± tak skondensowane, jak to tylko mo¿liwe.
 
 %prep
 %setup -q
 %patch0 -p1
 
-%build
-
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d \
-	$RPM_BUILD_ROOT%{_mandir}/man8 \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
+install -d $RPM_BUILD_ROOT{%{_mandir}/man8,/etc/rc.d/init.d}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -54,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README INSTALL CREDITS Changelog
 %attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man8/*
 %attr(750,root,root) %dir %{_sysconfdir}/%{name}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%attr(755,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%{_mandir}/man8/*
