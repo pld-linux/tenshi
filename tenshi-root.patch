@@ -7,6 +7,6 @@
 -		install -o tenshi -g root -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
 +		install -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
  	install -d ${DESTDIR}${docdir}
- 	install ${DOCS} ${DESTDIR}${docdir}/
+ 	install -m 0644 ${DOCS} ${DESTDIR}${docdir}/
 -	install -o tenshi -g root -m 750 -d ${DESTDIR}${libdir}
 +	install -m 750 -d ${DESTDIR}${libdir}
