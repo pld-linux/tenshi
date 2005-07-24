@@ -1,11 +1,12 @@
 Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
-Version:	0.3.2
-Release:	0.5
-License:	GPL
+Version:	0.3.4
+Release:	0.1
+License:	GPL v2
 Group:		Applications/System
 Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
+# Source0-md5:	f3e875540833a85c43052d96c5698463
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
@@ -83,9 +84,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README INSTALL CREDITS Changelog
+%doc CREDITS Changelog README
 %attr(755,root,root) %{_sbindir}/*
 %attr(750,root,root) %dir %{_sysconfdir}/%{name}
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
