@@ -1,3 +1,4 @@
+%include	/usr/lib/rpm/macros.perl
 Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
@@ -10,10 +11,10 @@ Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
-PreReq:		rc-scripts
+BuildRequires:	rpmbuild(macros) >= 1.228
+BuildRequires:	rpm-perlprov
+Requires(post,preun):	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-Requires:	perl-base >= 1:5.6
-Requires:	perl-modules >= 1:5.8.0
 Obsoletes:	wasabi
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -68,17 +69,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+%service %{name} restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop >&2
-	fi
+	%service -q %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
 
