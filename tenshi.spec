@@ -3,13 +3,14 @@ Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.3.4
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
 # Source0-md5:	f3e875540833a85c43052d96c5698463
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
+Patch1:		%{name}-debugsmtp.patch
 URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
 BuildRequires:	rpmbuild(macros) >= 1.228
 BuildRequires:	rpm-perlprov
@@ -53,6 +54,7 @@ wiadomo¶ci s± tak skondensowane, jak to tylko mo¿liwe.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
