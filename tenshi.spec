@@ -6,18 +6,26 @@ Version:	0.5.1
 Release:	1
 License:	ISC
 Group:		Applications/System
-Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
+Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
 # Source0-md5:	44361d5d8defc5170146f467a8825413
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
-URL:		http://www.gentoo.org/proj/en/infrastructure/tenshi/index.xml
-BuildRequires:	rpmbuild(macros) >= 1.228
+URL:		http://dev.inversepath.com/trac/tenshi
 BuildRequires:	rpm-perlprov
-Requires(post,preun):	rc-scripts
+BuildRequires:	rpmbuild(macros) >= 1.228
 Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun):	rc-scripts
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Obsoletes:	wasabi
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_sysconfdir	/etc/tenshi
 
 %description
 Tenshi is a log monitoring program, designed to watch one or more log
@@ -56,16 +64,19 @@ wiadomo¶ci s± tak skondensowane, jak to tylko mo¿liwe.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_mandir}/man8,/etc/rc.d/init.d}
+install -d $RPM_BUILD_ROOT{%{_mandir}/man8,/var/run/tenshi}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%pre
+%groupadd -g 175 %{name}
+%useradd -u 175 -d %{_sysconfdir} -g %{name} -c "Tenshi User" %{name}
 
 %post
 /sbin/chkconfig --add %{name}
@@ -77,11 +88,18 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del %{name}
 fi
 
+%postun
+if [ "$1" = "0" ]; then
+	%userremove %{name}
+	%groupremove %{name}
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc CREDITS Changelog README
 %attr(755,root,root) %{_sbindir}/*
-%attr(750,root,root) %dir %{_sysconfdir}/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(750,root,tenshi) %dir %{_sysconfdir}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
+%dir %attr(775,root,tenshi) /var/run/tenshi
