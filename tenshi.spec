@@ -4,7 +4,7 @@ Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.5.1
 Release:	1
-License:	GPL v2
+License:	ISC
 Group:		Applications/System
 Source0:	http://dev.gentoo.org/~lcars/tenshi/%{name}-%{version}.tar.gz
 # Source0-md5:	44361d5d8defc5170146f467a8825413
