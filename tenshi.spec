@@ -3,13 +3,14 @@ Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.5.1
-Release:	1
+Release:	2
 License:	ISC
 Group:		Applications/System
 Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
 # Source0-md5:	44361d5d8defc5170146f467a8825413
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
+Patch1:		%{name}-config.patch
 URL:		http://dev.inversepath.com/trac/tenshi
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.228
@@ -61,6 +62,7 @@ wiadomo¶ci s± tak skondensowane, jak to tylko mo¿liwe.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -96,10 +98,10 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc CREDITS Changelog README
+%doc CREDITS Changelog README tenshi.conf
 %attr(755,root,root) %{_sbindir}/*
 %attr(750,root,tenshi) %dir %{_sysconfdir}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
+%attr(640,root,tenshi) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
 %dir %attr(775,root,tenshi) /var/run/tenshi
