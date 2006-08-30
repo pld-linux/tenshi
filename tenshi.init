@@ -12,6 +12,11 @@ if grep -q sample /etc/tenshi/tenshi.conf; then
 	exit 1
 fi
 
+checkconfig() {
+	/usr/sbin/tenshi -C -c /etc/tenshi/tenshi.conf
+	return $?
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -19,7 +24,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/tenshi ]; then
 		msg_starting tenshi
-		daemon /usr/sbin/tenshi -c /etc/tenshi/tenshi.conf -P /var/run/tenshi.pid
+		daemon /usr/sbin/tenshi -c /etc/tenshi/tenshi.conf -P /var/run/tenshi/tenshi.pid
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tenshi
 	else
@@ -30,7 +35,7 @@ case "$1" in
         if [ -f /var/lock/subsys/tenshi ]; then
 		msg_stopping tenshi
 		killproc tenshi
-		rm -f /var/run/tenshi.pid /var/lock/subsys/tenshi >/dev/null 2>&1
+		rm -f /var/run/tenshi/tenshi.pid /var/lock/subsys/tenshi >/dev/null 2>&1
 	else
 		msg_not_running tenshi
 	fi
@@ -46,9 +51,14 @@ case "$1" in
 	;;
   reload|force-reload)
 	if [ -f /var/lock/subsys/tenshi ]; then
-		echo "Reloading configuration and flushing all queues"
-		kill -HUP `cat /var/run/tenshi.pid` &>/dev/null
-		RETVAL=$?
+		if checkconfig; then
+			echo "Reloading configuration and flushing all queues"
+			kill -HUP `cat /var/run/tenshi/tenshi.pid`
+			RETVAL=$?
+		else
+			echo "tenshi config file has syntax error, not restarting"
+			RETVAL=7
+		fi
 	else
 		msg_not_running tenshi
 		RETVAL=7
@@ -57,7 +67,7 @@ case "$1" in
   flush)
 	if [ -f /var/lock/subsys/tenshi ]; then
 		echo "Flushing all queues"
-		kill -USR2 `cat /var/run/tenshi.pid` &>/dev/null
+		kill -USR2 `cat /var/run/tenshi/tenshi.pid`
 		RETVAL=$?
 	else
 		msg_not_running tenshi
