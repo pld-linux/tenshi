@@ -1,0 +1,11 @@
+--- tenshi-0.5.1/tenshi.conf~	2006-06-18 15:33:24.000000000 +0300
++++ tenshi-0.5.1/tenshi.conf	2006-08-30 16:30:54.090340335 +0300
+@@ -7,7 +7,7 @@
+ set uid tenshi
+ set gid tenshi
+ 
+-set pidfile /var/run/tenshi.pid
++set pidfile /var/run/tenshi/tenshi.pid
+ set logfile /var/log/messages
+ set logfile /var/log/mail.log
+ # set tail   /usr/bin/tail
