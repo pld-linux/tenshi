@@ -1,12 +1,20 @@
---- a/Makefile~	2004-07-16 00:15:54.000000000 +0300
-+++ b/Makefile	2004-07-19 01:27:41.000000000 +0300
-@@ -35,7 +35,7 @@
- install:
- 	install -D tenshi ${DESTDIR}${bindir}/tenshi
- 	[ -f ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf ] || \
--		install -o tenshi -g root -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
-+		install -m 0640 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
+--- tenshi-0.5.1/Makefile	2006-08-30 14:39:38.320918658 +0300
++++ tenshi-0.5.1/Makefile	2006-08-30 14:40:47.672478124 +0300
+@@ -6,7 +6,7 @@
+ bindir = /usr/sbin
+ sysconfdir = /etc
+ docdir = /usr/share/doc/tenshi-${VERSION}
+-mandir = /usr/man
++mandir = /usr/share/man
+ libdir = /var/lib/tenshi
+ 
+ DOCS = README INSTALL CREDITS LICENSE Changelog
+@@ -38,5 +38,5 @@
+-		install -g root -m 0644 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
++		install -m 0644 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
  	install -d ${DESTDIR}${docdir}
  	install -m 0644 ${DOCS} ${DESTDIR}${docdir}/
--	install -o tenshi -g root -m 750 -d ${DESTDIR}${libdir}
-+	install -m 750 -d ${DESTDIR}${libdir}
+-	install -g root -m 0644 tenshi.8 ${DESTDIR}${mandir}/man8/
+-	install -g root -m 755 -d ${DESTDIR}${libdir}
++	install -m 0644 tenshi.8 ${DESTDIR}${mandir}/man8/
++	install -m 755 -d ${DESTDIR}${libdir}
