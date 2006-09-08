@@ -3,7 +3,7 @@ Summary:	Log parsing and notification program
 Summary(pl):	Program do analizy logów i powiadamiania
 Name:		tenshi
 Version:	0.5.1
-Release:	2
+Release:	3
 License:	ISC
 Group:		Applications/System
 Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
