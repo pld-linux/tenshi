@@ -1,6 +1,6 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	Log parsing and notification program
-Summary(pl):	Program do analizy logów i powiadamiania
+Summary(pl.UTF-8):   Program do analizy logÃ³w i powiadamiania
 Name:		tenshi
 Version:	0.5.1
 Release:	3
@@ -43,21 +43,21 @@ operators ( ). This allows cleaner and more readable reports. All
 reports are separated by hostname and all messages are condensed when
 possible.
 
-%description -l pl
-Tenshi to program do monitorowania logów zaprojektowany do ogl±dania
-jednego lub wiêkszej liczby plików logów pod k±tem linii pasuj±cych do
-zdefiniowanych przez u¿ytkownika wyra¿eñ regularnych i raportowania
-tych dopasowañ. Wyra¿enia regularne s± przypisywane do kolejek
-maj±cych czêstotliwo¶æ alarmowania i listê adresatów pocztowych.
+%description -l pl.UTF-8
+Tenshi to program do monitorowania logÃ³w zaprojektowany do oglÄ…dania
+jednego lub wiÄ™kszej liczby plikÃ³w logÃ³w pod kÄ…tem linii pasujÄ…cych do
+zdefiniowanych przez uÅ¼ytkownika wyraÅ¼eÅ„ regularnych i raportowania
+tych dopasowaÅ„. WyraÅ¼enia regularne sÄ… przypisywane do kolejek
+majÄ…cych czÄ™stotliwoÅ›Ä‡ alarmowania i listÄ™ adresatÃ³w pocztowych.
 
-Kolejki mog± byæ konfigurowane do wysy³ania powiadomieñ zaraz po
-napotkaniu linii w logu lub wysy³ania regularnych raportów.
+Kolejki mogÄ… byÄ‡ konfigurowane do wysyÅ‚ania powiadomieÅ„ zaraz po
+napotkaniu linii w logu lub wysyÅ‚ania regularnych raportÃ³w.
 
-Dodatkowo nieciekawe pola z linii logów (takie jak numery procesów)
-mog± byæ pokrywane standardowymi operatorami grupowania wyra¿eñ
+Dodatkowo nieciekawe pola z linii logÃ³w (takie jak numery procesÃ³w)
+mogÄ… byÄ‡ pokrywane standardowymi operatorami grupowania wyraÅ¼eÅ„
 regularnych ( ). Daje to bardziej przejrzyste i bardziej czytelne
-raporty. Wszystkie raporty s± oddzielane nazw± hosta, a wszystkie
-wiadomo¶ci s± tak skondensowane, jak to tylko mo¿liwe.
+raporty. Wszystkie raporty sÄ… oddzielane nazwÄ… hosta, a wszystkie
+wiadomoÅ›ci sÄ… tak skondensowane, jak to tylko moÅ¼liwe.
 
 %prep
 %setup -q
