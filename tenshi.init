@@ -52,11 +52,11 @@ case "$1" in
   reload|force-reload)
 	if [ -f /var/lock/subsys/tenshi ]; then
 		if checkconfig; then
-			echo "Reloading configuration and flushing all queues"
+			show "Reloading tenshi configuration and flushing all queues"; echo
 			kill -HUP `cat /var/run/tenshi/tenshi.pid`
 			RETVAL=$?
 		else
-			echo "tenshi config file has syntax error, not restarting"
+			show "tenshi config file has syntax error, not restarting"; echo
 			RETVAL=7
 		fi
 	else
