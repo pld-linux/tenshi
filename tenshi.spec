@@ -2,12 +2,12 @@
 Summary:	Log parsing and notification program
 Summary(pl.UTF-8):	Program do analizy logów i powiadamiania
 Name:		tenshi
-Version:	0.7
+Version:	0.8
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
-# Source0-md5:	dad412c7fbf6923f0992a0b6b13d6e53
+# Source0-md5:	45a85db41c7a19893662940e1605bf33
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 Patch1:		%{name}-config.patch
