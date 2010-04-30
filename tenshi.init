@@ -2,9 +2,14 @@
 #
 # chkconfig:	345 29 69
 # description:	tenshi
+#
+# $Id$
 
 # Source function library
 . /etc/rc.d/init.d/functions
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/tenshi ] && . /etc/sysconfig/tenshi
 
 # do some sanity check
 if grep -q sample /etc/tenshi/tenshi.conf; then
@@ -12,78 +17,139 @@ if grep -q sample /etc/tenshi/tenshi.conf; then
 	exit 1
 fi
 
-checkconfig() {
+# configtest itself
+# must return non-zero if check failed
+# output is discarded if checkconfig is ran without details
+configtest() {
 	/usr/sbin/tenshi -C -c /etc/tenshi/tenshi.conf
 	return $?
 }
 
-start() {
-	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/tenshi ]; then
-		msg_starting tenshi
-		daemon /usr/sbin/tenshi -c /etc/tenshi/tenshi.conf -P /var/run/tenshi/tenshi.pid
+# wrapper for configtest
+checkconfig() {
+	local details=${1:-0}
+
+	if [ $details = 1 ]; then
+		# run config test and display report (status action)
+		show "Checking %s configuration" "tenshi"; busy
+		local out
+		out=$(configtest 2>&1)
 		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tenshi
+		if [ $RETVAL = 0 ]; then
+			ok
+		else
+			fail
+		fi
+		[ "$out" ] && echo >&2 "$out"
 	else
-		msg_already_running tenshi
+		# run config test and abort with nice message if failed
+		# (for actions checking status before action).
+		configtest >/dev/null 2>&1
+		RETVAL=$?
+		if [ $RETVAL != 0 ]; then
+			show "Checking %s configuration" "tenshi"; fail
+			nls 'Configuration test failed. See details with %s "checkconfig"' $0
+			exit $RETVAL
+		fi
 	fi
 }
 
-stop() {
+start() {
+	# Check if the service is already running?
 	if [ -f /var/lock/subsys/tenshi ]; then
-		msg_stopping tenshi
-		killproc tenshi
-		rm -f /var/run/tenshi/tenshi.pid /var/lock/subsys/tenshi >/dev/null 2>&1
-	else
-		msg_not_running tenshi
+		msg_already_running "tenshi"
+		return
 	fi
+
+	checkconfig
+	msg_starting "tenshi"
+	daemon /usr/sbin/tenshi -c /etc/tenshi/tenshi.conf -P /var/run/tenshi/tenshi.pid
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tenshi
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/tenshi ]; then
+		msg_not_running "tenshi"
+		return
+	fi
+
+	# Stop daemons.
+	msg_stopping "tenshi"
+	killproc tenshi
+	rm -f /var/lock/subsys/tenshi /var/run/tenshi/tenshi.pid
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/tenshi ]; then
+		msg_not_running "tenshi"
+		RETVAL=7
+		return
+	fi
+
+	checkconfig
+	msg_reloading "tenshi"
+	killproc --pidfile /var/run/tenshi/tenshi.pid tenshi -HUP
+	RETVAL=$?
+}
+
+flush() {
+	if [ ! -f /var/lock/subsys/tenshi ]; then
+		msg_not_running "tenshi"
+		RETVAL=7
+		return
+	fi
+
+	checkconfig
+	echo "Flushing all queues"
+	killproc --pidfile /var/run/tenshi/tenshi.pid tenshi -USR2
+	RETVAL=$?
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/tenshi ]; then
+		msg_not_running "tenshi"
+		RETVAL=$1
+		return
+	fi
+
+	checkconfig
+	stop
+	start
 }
 
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
+	checkconfig
 	stop
 	start
 	;;
-  status)
-	status tenshi
-	exit $?
+  try-restart)
+	condrestart 0
 	;;
   reload|force-reload)
-	if [ -f /var/lock/subsys/tenshi ]; then
-		if checkconfig; then
-			show "Reloading tenshi configuration and flushing all queues"
-			kill -HUP `cat /var/run/tenshi/tenshi.pid`
-			RETVAL=$?
-			[ $RETVAL = 0 ] && ok || fail
-		else
-			show "The tenshi config file has syntax error, not restarting"; fail
-			RETVAL=7
-		fi
-	else
-		msg_not_running tenshi
-		RETVAL=7
-	fi
+	reload
 	;;
   flush)
-	if [ -f /var/lock/subsys/tenshi ]; then
-		echo "Flushing all queues"
-		kill -USR2 `cat /var/run/tenshi/tenshi.pid`
-		RETVAL=$?
-	else
-		msg_not_running tenshi
-		RETVAL=7
-	fi
+	flush
+	;;
+  checkconfig|configtest)
+	checkconfig 1
+	;;
+  status)
+	status tenshi
+	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status|flush}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|checkconfig|status}"
 	exit 3
 esac
 
