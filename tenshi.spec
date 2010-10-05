@@ -2,16 +2,16 @@
 Summary:	Log parsing and notification program
 Summary(pl.UTF-8):	Program do analizy logów i powiadamiania
 Name:		tenshi
-Version:	0.11
+Version:	0.12
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
-# Source0-md5:	b063f43bca3438e78a70a2f8b414007d
+# Source0-md5:	2b5b19c3b74b3fa7bb2a768b7a9c01ae
 Source1:	%{name}.init
 Patch0:		%{name}-root.patch
 Patch1:		%{name}-config.patch
-URL:		http://dev.inversepath.com/trac/tenshi
+URL:		http://www.inversepath.com/tenshi.html
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.228
 Requires(post,preun):	/sbin/chkconfig
