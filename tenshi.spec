@@ -9,6 +9,7 @@ Group:		Applications/System
 Source0:	http://dev.inversepath.com/tenshi/%{name}-%{version}.tar.gz
 # Source0-md5:	2b5b19c3b74b3fa7bb2a768b7a9c01ae
 Source1:	%{name}.init
+Source2:	%{name}.tmpfiles
 Patch0:		%{name}-root.patch
 Patch1:		%{name}-config.patch
 URL:		http://www.inversepath.com/tenshi.html
@@ -66,12 +67,14 @@ wiadomości są tak skondensowane, jak to tylko możliwe.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_mandir}/man8,/var/run/tenshi}
+install -d $RPM_BUILD_ROOT{%{_mandir}/man8,/var/run/tenshi} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,3 +108,4 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_mandir}/man8/*
 %dir %attr(775,root,tenshi) /var/run/tenshi
+/usr/lib/tmpfiles.d/%{name}.conf
