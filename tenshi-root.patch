@@ -1,10 +1,15 @@
---- tenshi-0.5.1/Makefile	2006-08-30 14:39:38.320918658 +0300
-+++ tenshi-0.5.1/Makefile	2006-08-30 14:40:47.672478124 +0300
-@@ -38,5 +38,5 @@
+--- tenshi-0.14/Makefile~	2012-06-03 12:59:59.000000000 +0300
++++ tenshi-0.14/Makefile	2013-10-23 21:23:51.272289331 +0300
+@@ -35,10 +35,10 @@
+ install:
+ 	install -D tenshi ${DESTDIR}${bindir}/tenshi
+ 	[ -f ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf ] || \
 -		install -g root -m 0644 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
 +		install -m 0644 -D tenshi.conf ${DESTDIR}${sysconfdir}/tenshi/tenshi.conf
  	install -d ${DESTDIR}${docdir}
  	install -m 0644 ${DOCS} ${DESTDIR}${docdir}/
+ 	[ -d ${DESTDIR}${mandir}/man8 ] || \
+ 		install -d ${DESTDIR}${mandir}/man8
 -	install -g root -m 0644 tenshi.8 ${DESTDIR}${mandir}/man8/
 -	install -g root -m 755 -d ${DESTDIR}${libdir}
 +	install -m 0644 tenshi.8 ${DESTDIR}${mandir}/man8/
