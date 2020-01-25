@@ -1,4 +1,3 @@
-%include	/usr/lib/rpm/macros.perl
 Summary:	Log parsing and notification program
 Summary(pl.UTF-8):	Program do analizy logów i powiadamiania
 Name:		tenshi
